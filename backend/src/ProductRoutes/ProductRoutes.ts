@@ -56,6 +56,46 @@ router.put('/update/:id', Protect, async (req: any, res:any) => {
     res.json(updated);
 });
 
+
+router.get('/listings', Protect, async (req: any, res: Response) => {
+    try {
+        const products = await prisma.product.findMany({
+            where: { ownerId: req.user.userId },
+            orderBy: { createdAt: "desc" },
+        });
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to fetch listings." });
+    }
+});
+
+router.get('/getAll', Protect, async (req: Request, res: Response) => {
+    try {
+        const { search, category } = req.query;
+
+        const filters: any = {};
+
+        if (search) {
+            filters.title = { contains: String(search), mode: "insensitive" };
+        }
+
+        if (category) {
+            filters.category = String(category);
+        }
+
+        const listings = await prisma.product.findMany({
+            where: filters,
+            orderBy: { createdAt: "desc" },
+        });
+
+        res.json(listings);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to fetch listings." });
+    }
+});
+  
+  
+
 router.delete('/:id', async (req: any, res:any) => {
     const { id } = req.params;
 
