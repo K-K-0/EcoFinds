@@ -38,13 +38,16 @@ CREATE TABLE "Purchase" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "productId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "purchasedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Purchase_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cart_userId_productId_key" ON "Cart"("userId", "productId");
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

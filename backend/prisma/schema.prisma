@@ -12,9 +12,13 @@ model User {
   email     String   @unique
   password  String
   username  String?
+  name      String?
+  bio       String?
+  location  String?
   products  Product[]
   cart      Cart[]
   purchases Purchase[]
+  updatedAt DateTime @default(now())
   createdAt DateTime @default(now())
 }
 
@@ -39,6 +43,8 @@ model Cart {
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
+
+  @@unique([userId,productId])
 }
 
 model Purchase {
@@ -47,5 +53,5 @@ model Purchase {
   productId String
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
-  createdAt DateTime @default(now())
+  purchasedAt DateTime @default(now())
 }
